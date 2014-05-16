@@ -6,6 +6,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 
 import com.eservice.ftdi.FtdiUtil;
+import com.eservice.inkosystems.DataObject;
 import com.eservice.inkosystems.IncoApiUtil;
 
 import android.support.v7.app.ActionBarActivity;
@@ -51,8 +52,16 @@ public class MainActivity extends ActionBarActivity {
 	public boolean write(byte[] bytes) {
 		if (outputStream == null) {
 			File f = new File( Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), "data.log");
+			if (!f.exists()) {
+				try {
+					f.createNewFile();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
 			try {
-				outputStream = openFileOutput(f.getAbsolutePath(), MODE_PRIVATE);
+				outputStream = new FileOutputStream(f, true);
 			} catch (FileNotFoundException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -62,9 +71,11 @@ public class MainActivity extends ActionBarActivity {
 		
 		try {
 			outputStream.write(bytes);
+			outputStream.close();
 			return true;
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		}
 		
@@ -189,7 +200,6 @@ public class MainActivity extends ActionBarActivity {
 			
 			Thread readThread = new Thread(new Runnable() {
 
-				long milis;
 				
 				@Override
 				public void run() {
@@ -206,36 +216,22 @@ public class MainActivity extends ActionBarActivity {
 							try {
 								final byte[] data = new byte[FtdiUtil.USB_DATA_BUFFER];
 								final int result = FtdiUtil.getInstance().getDevice().read(data, FtdiUtil.USB_DATA_BUFFER);
-								mLog.post(new Runnable() {
-									@Override
-									public void run() {
-										// TODO Auto-generated method stub
-										mLog.append("Result from reading operation : " + result);
-										mLog.append("\n");
-										mLog.append(new String(data));
-										mLog.append("\n");
-										
-									}
-								});
-								
 								mData.post(new Runnable() {
 									
 									@Override
 									public void run() {
 										// TODO Auto-generated method stub
-										///if (System.currentTimeMillis() - milis > 60000) {
 										try {
-											mData.setText("lines in data : " + IncoApiUtil.getTerminationPositionsAsString(data));
+											mData.setText(new DataObject(IncoApiUtil.getMessage(data)).toString());
 											
 										} catch (Exception e) {
 											mData.setText("Exception : " + e.getMessage());
 										}
-										//}
 									}
 								});
 								
-								//activity.write(data);
-								break;
+								final boolean result1 = activity.write(data);
+								
 							} catch (Exception e) {
 								final String msg = e.getMessage();
 								mLog.post(new Runnable() {
@@ -252,7 +248,6 @@ public class MainActivity extends ActionBarActivity {
 							}
 						}
 						
-						milis = System.currentTimeMillis();
 					}
 				}
 			});
