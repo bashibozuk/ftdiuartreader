@@ -11,6 +11,7 @@ import com.eservice.inkosystems.IncoApiUtil;
 
 import android.support.v7.app.ActionBarActivity;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.os.Environment;
 import android.view.LayoutInflater;
@@ -22,7 +23,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
-public class MainActivity extends ActionBarActivity {
+public class MainActivity extends FragmentActivity {
 
 	boolean mReadingEnabled;
 	
