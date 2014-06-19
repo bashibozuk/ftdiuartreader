@@ -99,18 +99,7 @@ public class IncoApiUtil {
 	
 	public static long intArrayToLong(int[] data) {
 		long result = 0;
-		//int index = data.length -1;
-
-		/*for (int i = 0; i < data.length; i++) {
-			result += data[i] << (index-- * 8);
-			result = result << 8;
-			result |= data[i];
-		}
-		*/
-		
 		for (int i = data.length - 1; i >= 0; i--) {
-			//result += (data[i] << (index * 8));
-			
 			result = result << 8;
 			result |= data[i];
 		}

@@ -13,6 +13,24 @@ public class DataObject {
 	
 	int[] accelometer;
 	
+	public float posX;
+	
+	public float posY;
+	
+	public float posZ;
+	
+	//Encoder edges
+    public short dA1 = 0;
+    public short dA2 = 0;
+    
+    // dX, dY from encoder
+    public float dX = 0;
+    public float dY = 0;
+
+	public int encAlgRes;
+
+	public int encAlgMode;
+	
 	public DataObject() {
 		init();
 	}
@@ -60,6 +78,10 @@ public class DataObject {
 		accelometer[0] = (int)IncoApiUtil.intArrayToLong(new int[]{qdata[3 ], qdata[2 ], qdata[1], qdata[0]});
 		accelometer[1] = (int)IncoApiUtil.intArrayToLong(new int[]{qdata[7 ], qdata[6 ], qdata[5], qdata[4]});
 		accelometer[2] = (int)IncoApiUtil.intArrayToLong(new int[]{qdata[11], qdata[10], qdata[9], qdata[8]});
+	}
+	
+	public short[] getQuarternions() {
+		return quarternions;
 	}
 	
 	@SuppressLint("DefaultLocale")

@@ -2,7 +2,6 @@ package com.eservice.ftdi;
 
 import android.content.Context;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.ftdi.j2xx.D2xxManager;
 import com.ftdi.j2xx.D2xxManager.D2xxException;
@@ -78,7 +77,10 @@ public class FtdiUtil {
 	}
 	
 	public boolean openDevice() {
-		ftdiDevice = getFtdiManager().openByIndex(ctx, 0);
+		if (getDevicesCount() > 0) {
+			ftdiDevice = getFtdiManager().openByIndex(ctx, 0);
+		}
+		
 		return ftdiDevice != null;
 	}
 	
@@ -93,7 +95,7 @@ public class FtdiUtil {
 	
 	private void configDevice() {
 		if (ftdiDevice == null) {
-			Log.w("FTDIUTIL", "Cant configure ftdi device, it is null");
+			Log.w("FTDIUTIL", "Can't configure ftdi device, it is null");
 			return;
 		}
 		

@@ -8,8 +8,8 @@ import java.io.IOException;
 import com.eservice.ftdi.FtdiUtil;
 import com.eservice.inkosystems.DataObject;
 import com.eservice.inkosystems.IncoApiUtil;
+import com.eservice.util.ExceptionUtil;
 
-import android.support.v7.app.ActionBarActivity;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
@@ -221,12 +221,11 @@ public class MainActivity extends FragmentActivity {
 									
 									@Override
 									public void run() {
-										// TODO Auto-generated method stub
 										try {
 											mData.setText(new DataObject(IncoApiUtil.getMessage(data)).toString());
 											
 										} catch (Exception e) {
-											mData.setText("Exception : " + e.getMessage());
+											mData.setText("Exception : " + ExceptionUtil.asString(e));
 										}
 									}
 								});
