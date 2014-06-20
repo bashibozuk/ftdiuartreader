@@ -54,6 +54,7 @@ public class PositionCalculator {
 	public boolean updatePosition(DataObject sensorData) {
 		if (bWaitInit) {
 			initialize(sensorData);
+			bWaitInit = false;
 		} else {
 			return calculate(sensorData);
 		}

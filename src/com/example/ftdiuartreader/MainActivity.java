@@ -8,8 +8,10 @@ import java.io.IOException;
 import com.eservice.ftdi.FtdiUtil;
 import com.eservice.inkosystems.DataObject;
 import com.eservice.inkosystems.IncoApiUtil;
+import com.eservice.inkosystems.PositionCalculator;
 import com.eservice.util.ExceptionUtil;
 
+import android.R.bool;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
@@ -145,8 +147,10 @@ public class MainActivity extends FragmentActivity {
 		
 		TextView mLog;
 		TextView mData;
+		PositionCalculator mPositionCalculator;
 		
 		public PlaceholderFragment() {
+			mPositionCalculator = new PositionCalculator(0, 0, 0);
 		}
 
 		@Override
@@ -222,7 +226,12 @@ public class MainActivity extends FragmentActivity {
 									@Override
 									public void run() {
 										try {
-											mData.setText(new DataObject(IncoApiUtil.getMessage(data)).toString());
+											DataObject dataObject = new DataObject(IncoApiUtil.getMessage(data));
+											String text = dataObject.toString();
+											boolean updatePositionResult = mPositionCalculator.updatePosition(dataObject);
+											text += "\n Update position result is : " + updatePositionResult;
+											text += "\n X: " + dataObject.posX + " Y" + dataObject.posY + "\n";
+											mData.setText(text);
 											
 										} catch (Exception e) {
 											mData.setText("Exception : " + ExceptionUtil.asString(e));

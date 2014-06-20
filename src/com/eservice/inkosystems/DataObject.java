@@ -31,6 +31,8 @@ public class DataObject {
 
 	public int encAlgMode;
 	
+	static short[] lastEncoderData = new short[] {0, 0};
+	
 	public DataObject() {
 		init();
 	}
@@ -49,7 +51,8 @@ public class DataObject {
 	
 	public void fromInts(int[] data) {
 		readQuarternions(data);
-		readEncoderData(data);
+		//readEncoderData(data);
+		readEncoderOffsets(data);
 		readTimestamp(data);
 		readAccelometer(data);
 	}
@@ -66,6 +69,23 @@ public class DataObject {
 		int[] qdata = Arrays.copyOfRange(data, 10, 14);
 		encoderData[0] = (short)IncoApiUtil.intArrayToLong(new int[]{qdata[1], qdata[0]});
 		encoderData[1] = (short)IncoApiUtil.intArrayToLong(new int[]{qdata[3], qdata[2]});
+		dA1 = encoderData[0];
+		dA2 = encoderData[1];
+	}
+	
+	public void readEncoderOffsets(int[] data) {
+		int[] qdata = Arrays.copyOfRange(data, 10, 14);
+		short encoder1 = (short)IncoApiUtil.intArrayToLong(new int[]{qdata[1], qdata[0]});
+		short encoder2 = (short)IncoApiUtil.intArrayToLong(new int[]{qdata[3], qdata[2]});
+		
+		encoderData[0] = (short) (encoder1 - lastEncoderData[0]);
+		encoderData[1] = (short) (encoder2 - lastEncoderData[1]);
+		
+		lastEncoderData[0] = encoder1;
+		lastEncoderData[1] = encoder2;
+		
+		dA1 = encoderData[0];
+		dA2 = encoderData[1];
 	}
 	
 	public void readTimestamp(int[] data) {
@@ -93,5 +113,13 @@ public class DataObject {
 			timestamp, 
 			accelometer[0], accelometer[1], accelometer[2]
 		);
+	}
+	
+	public short[] getEncoderData() {
+		return this.encoderData;
+	}
+	
+	public short getEncoderData(int index) {
+		return encoderData[index];
 	}
 }
