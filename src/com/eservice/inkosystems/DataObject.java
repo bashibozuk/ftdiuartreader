@@ -31,6 +31,8 @@ public class DataObject {
 
 	public int encAlgMode;
 	
+	public int calcuatorIsIniting;
+	
 	static short[] lastEncoderData = new short[] {0, 0};
 	
 	public DataObject() {
@@ -77,6 +79,11 @@ public class DataObject {
 		int[] qdata = Arrays.copyOfRange(data, 10, 14);
 		short encoder1 = (short)IncoApiUtil.intArrayToLong(new int[]{qdata[1], qdata[0]});
 		short encoder2 = (short)IncoApiUtil.intArrayToLong(new int[]{qdata[3], qdata[2]});
+		
+		// the second encoder always gives values with 
+		// the opposite sign of the other encoder
+		// because they are in mirroring positions
+		encoder2 *= -1;
 		
 		encoderData[0] = (short) (encoder1 - lastEncoderData[0]);
 		encoderData[1] = (short) (encoder2 - lastEncoderData[1]);

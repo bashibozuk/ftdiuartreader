@@ -11,7 +11,6 @@ import com.eservice.inkosystems.IncoApiUtil;
 import com.eservice.inkosystems.PositionCalculator;
 import com.eservice.util.ExceptionUtil;
 
-import android.R.bool;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
@@ -211,7 +210,7 @@ public class MainActivity extends FragmentActivity {
 					while (true) {
 						
 						try {
-							Thread.sleep(10);
+							Thread.sleep(5);
 						} catch (InterruptedException e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
@@ -231,10 +230,14 @@ public class MainActivity extends FragmentActivity {
 											boolean updatePositionResult = mPositionCalculator.updatePosition(dataObject);
 											text += "\n Update position result is : " + updatePositionResult;
 											text += "\n X: " + dataObject.posX + " Y" + dataObject.posY + "\n";
+											text += "\n dX: " + dataObject.dX + " dY" + dataObject.dY + "\n";
+											text += "\n Calculator is initing: " + dataObject.calcuatorIsIniting + "\n";
+											
 											mData.setText(text);
 											
 										} catch (Exception e) {
 											mData.setText("Exception : " + ExceptionUtil.asString(e));
+											activity.setReadingEnabled(false);
 										}
 									}
 								});

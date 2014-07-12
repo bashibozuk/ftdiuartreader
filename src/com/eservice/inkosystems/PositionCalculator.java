@@ -1,5 +1,7 @@
 package com.eservice.inkosystems;
 
+import android.content.IntentSender.SendIntentException;
+
 //import com.eservice.smartcart.map.MapObject;
 
 public class PositionCalculator {
@@ -55,7 +57,9 @@ public class PositionCalculator {
 		if (bWaitInit) {
 			initialize(sensorData);
 			bWaitInit = false;
+			sensorData.calcuatorIsIniting = 1;
 		} else {
+			sensorData.calcuatorIsIniting = 2;
 			return calculate(sensorData);
 		}
 
